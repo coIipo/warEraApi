@@ -25,6 +25,9 @@ public class marketPriceCSV {
         } else {
             lines.add("nombre,marketPrice");
         }
+
+        System.out.println(FILE.toAbsolutePath());
+        
         Map<String, String> updated = new LinkedHashMap<>();
         for (int i = 1; i < lines.size(); i++) {
             String line = lines.get(i).trim();
@@ -96,3 +99,4 @@ public class marketPriceCSV {
         return existingPrices;
     }
 }
+
