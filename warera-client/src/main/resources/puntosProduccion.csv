@@ -1,0 +1,19 @@
+Item,Puntos de produccion,Bonus de produccion,Materia prima,Cantidad materia prima,Precio materia prima
+cocain,200,10,coca,200
+coca,1,30
+heavyAmmo,16,45,lead,16
+ammo,8,55.75,lead,4
+lightAmmo,4,40,lead,1
+lead,1,55.5
+cookedFish,40,15,fish,1
+steak,20,10,livestock,1
+bread,10,10,grain,10
+fish,40,60
+livestock,20,60
+grain,1,40
+oil,1,35,petroleum,1
+steel,10,63.25,iron,10
+concrete,10,61.5,limestone,10
+petroleum,1,45
+iron,1,72.5
+limestone,1,61
