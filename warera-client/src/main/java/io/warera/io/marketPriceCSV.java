@@ -18,16 +18,14 @@ import io.warera.model.Item;
 
 public class marketPriceCSV {
     private static final Path FILE = Paths.get("market_results.csv");
+    System.out.println(FILE.toAbsolutePath());
     public static void writeResultsCsv(HashMap<String, Item> config, HashMap<String, Double> prices) throws IOException {
         List<String> lines = new ArrayList<>();
         if (Files.exists(FILE)) {
             lines = Files.readAllLines(FILE, StandardCharsets.UTF_8);
         } else {
             lines.add("nombre,marketPrice");
-        }
-
-        System.out.println(FILE.toAbsolutePath());
-        
+        }        
         Map<String, String> updated = new LinkedHashMap<>();
         for (int i = 1; i < lines.size(); i++) {
             String line = lines.get(i).trim();
@@ -99,4 +97,5 @@ public class marketPriceCSV {
         return existingPrices;
     }
 }
+
 
