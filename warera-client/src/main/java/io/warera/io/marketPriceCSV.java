@@ -16,8 +16,16 @@ import java.util.Map;
 import io.warera.model.Item;
 
 public class marketPriceCSV {
+    
+    private static Path getCsvPath() {
+        String p = System.getenv("CSV_PATH");
+        if (p == null || p.isBlank()) {
+            throw new IllegalStateException("CSV_PATH not defined");
+        }
+        return Path.of(p);
+    }
 
-    private static final Path FILE = Paths.get("market_results.csv");
+    private static final Path FILE = getCsvPath();
 
     public static void writeResultsCsv(HashMap<String, Item> config,
                                        HashMap<String, Double> prices) throws IOException {
@@ -112,3 +120,4 @@ public class marketPriceCSV {
         return existingPrices;
     }
 }
+
