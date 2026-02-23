@@ -3,7 +3,6 @@ package io.warera.io;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,23 +16,35 @@ import java.util.Map;
 import io.warera.model.Item;
 
 public class marketPriceCSV {
+
     private static final Path FILE = Paths.get("market_results.csv");
-    System.out.println(FILE.toAbsolutePath());
-    public static void writeResultsCsv(HashMap<String, Item> config, HashMap<String, Double> prices) throws IOException {
+
+    public static void writeResultsCsv(HashMap<String, Item> config,
+                                       HashMap<String, Double> prices) throws IOException {
+
+        System.out.println("CSV PATH = " + FILE.toAbsolutePath());
+
         List<String> lines = new ArrayList<>();
+
         if (Files.exists(FILE)) {
-            lines = Files.readAllLines(FILE, StandardCharsets.UTF_8);
+            lines = Files.readAllLines(FILE);
         } else {
             lines.add("nombre,marketPrice");
-        }        
+        }
+
         Map<String, String> updated = new LinkedHashMap<>();
+
         for (int i = 1; i < lines.size(); i++) {
             String line = lines.get(i).trim();
             if (line.isEmpty()) continue;
+
             String[] parts = line.split(",", -1);
+
             String name = parts[0];
             String oldPrice = parts.length > 1 ? parts[1] : "";
+
             Double newPrice = prices.get(name);
+
             String priceStr;
             if (newPrice == null) {
                 priceStr = oldPrice;
@@ -43,6 +54,7 @@ public class marketPriceCSV {
 
             updated.put(name, name + "," + priceStr);
         }
+
         for (String item : config.keySet()) {
             if (!updated.containsKey(item)) {
                 Double p = prices.get(item);
@@ -51,10 +63,14 @@ public class marketPriceCSV {
             }
         }
 
-        try (BufferedWriter bw =
-                     Files.newBufferedWriter(FILE, StandardCharsets.UTF_8)) {
+        if (FILE.getParent() != null) {
+            Files.createDirectories(FILE.getParent());
+        }
+
+        try (BufferedWriter bw = Files.newBufferedWriter(FILE)) {
             bw.write("nombre,marketPrice");
             bw.newLine();
+
             for (String row : updated.values()) {
                 bw.write(row);
                 bw.newLine();
@@ -70,15 +86,14 @@ public class marketPriceCSV {
             return existingPrices;
         }
 
-        try (BufferedReader br =
-                     Files.newBufferedReader(FILE, StandardCharsets.UTF_8)) {
+        try (BufferedReader br = Files.newBufferedReader(FILE)) {
 
             br.readLine(); // header
 
             String line;
             while ((line = br.readLine()) != null) {
 
-                String[] row = line.split(",", -1);
+                String[] row = line.split(",");
 
                 if (row.length >= 2) {
                     String name = row[0].trim();
@@ -91,11 +106,9 @@ public class marketPriceCSV {
             }
 
         } catch (IOException | NumberFormatException e) {
-            System.out.println("No previous results found or error reading them.");
+            System.out.println("Error reading market_results.csv");
         }
 
         return existingPrices;
     }
 }
-
-
